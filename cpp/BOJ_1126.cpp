@@ -1,42 +1,30 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
+#define f(i,l,r) for(int i=l;i<=r;++i)
+#define update(a,b) a=max(a,b)
 using namespace std;
-typedef long long ll;
-typedef pair<int,int> pii;
-typedef pair<ll,ll> pll;
-#define pb push_back
-#define ff first
-#define ss second
-#define MOD 600921647
-#define N 500000
-#define M 3010
 
-int n,m,a[2][N+10];
+const int MAXH=25e4;
+int n,h,s[2][MAXH+1],val,i;
 
 int main(){
-    freopen("input.txt","r",stdin);
-    /*
-int tc; cin>>tc;
-while(tc--)
-{//*/
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    cin>>n;
-    memset(a,-1,sizeof(a));
-    a[n&1][0]=0;
-    for(int i;n--;)
-    {
-        cin>>i;
-        memcpy(a[n&1],a[!(n&1)],sizeof(int)*N);
-        for(int j=N;j--;)
-            if(~a[!(n&1)][j])
-            {
-                if(j+i<N) a[n&1][j+i]=max(a[n&1][j+i],a[!(n&1)][j]);
-                a[n&1][abs(j-i)]=max(a[n&1][abs(j-i)],a[!(n&1)][j]+min(i,j));
-            }
-    }
-    if(a[0][0]>0) cout<<a[0][0];
-    else printf("-1");
+	memset(s,-1,sizeof(s));
+	s[0][0]=0;
 
-    /*
-}//*/
-    return 0;
+	cin>>n;
+	while(n--){
+		cin>>h;
+		int ni=i^1;
+		f(j,0,MAXH)if((val=s[i][j])>=0){
+			int a=j+h,b=abs(j-h);
+			update(s[ni][j],val);				// 1
+			if(a<=MAXH)update(s[ni][a],val+h);		// 2
+			if(b<=MAXH)update(s[ni][b],val+(j<h?b:0));	// 3
+		}
+		i=ni;
+	}
+
+	cout<<(s[i][0]>0?s[i][0]:-1);
+	return 0;
 }
