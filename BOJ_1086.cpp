@@ -1,48 +1,60 @@
 #include <bits/stdc++.h>
+#define ft first
+#define sd second
+#define all(x) (x).begin(), (x).end()
+#define mem(v, e) memset((v), (e), sizeof((v)))
 using namespace std;
-typedef long long ll;
-typedef pair<int,int> pii;
-typedef pair<double,double> pdd;
-#define pb push_back
-#define ff first
-#define ss second
-#define MOD 1000000009
-#define N 100010
-#define M 1010
-
-int n,m,ten[55]={1},a[20],b[20];
-ll ans[(1<<15)+10][110]={1};
-string c[20];
-list<int> d[20];
-
-int main(){
-    freopen("input.txt","r",stdin);
-    cin>>n;
-    for(int i=0;i<n;i++) cin>>c[i];
-    cin>>m;
-    for(int i=1;i<51;i++) ten[i]=ten[i-1]*10%m;
-    for(int i=0;i<n;i++) b[i]=ten[c[i].length()];
-    for(int i=0;i<n;i++)
-        for(int j=c[i].length(),k=0;j--;k++)
-            a[i]=(a[i]+ten[k]*(c[i][j]-'0'))%m;
-
-    for(int i=1,cnt;i<1<<n;i++)
-    {
-        cnt=0;
-        for(int j=i;j;j>>=1) cnt+=j&1;
-        d[cnt].pb(i);
+using ll = long long;
+using pii = pair<int, int>;
+ 
+int n, mod;
+int tenPow[55];
+string nums[22];
+pii p[22];
+ll d[1 << 15][111];
+ 
+ll go(int s, int num) {
+    if (s == (1 << n) - 1) return (num % mod == 0);
+ 
+    ll &ret = d[s][num];
+    if (ret != -1) return ret;
+    ret = 0;
+    for (int k = 0; k < n; k++) {
+        if (s & (1 << k)) continue;
+        auto[next, cnt] = p[k];
+        ll nextNum = num * tenPow[cnt] + next;
+        nextNum %= mod;
+        ret += go(s | (1 << k), nextNum);
     }
-    for(int ii=1;ii<=n;ii++)
-        for(auto i:d[ii])
-            for(int j=0;i>>j;j++)
-                if(i>>j&1)
-                    for(int k=0;k<m;k++)
-                        ans[i][(k*b[j]+a[j])%m]+=ans[i^1<<j][k];
-    ll p=ans[(1<<n)-1][0],q=1;
-//    cout<<p<<'\n';
-    if(!p) { printf("0/1"); return 0; }
-    for(ll i=2;i<=n;i++) q*=i;
-    ll tmp=__gcd(p,q);
-    printf("%lld/%lld",p/tmp,q/tmp);
-    return 0;
+    return ret;
+}
+ 
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+ 
+    cin >> n;
+    ll all = 1;
+    for (int i = 0; i < n; i++) {
+        cin >> nums[i];
+        all *= (i + 1);
+    }
+    cin >> mod;
+    tenPow[0] = 1 % mod;
+    for (int i = 1; i < 55; i++) {
+        tenPow[i] = (tenPow[i - 1] * 10) % mod;
+    }
+    for (int i = 0; i < n; i++) {
+        reverse(all(nums[i]));
+        p[i].sd = nums[i].size();
+        for (int j = 0; j < nums[i].size(); j++) {
+            p[i].ft += (nums[i][j] - '0') * tenPow[j] % mod;
+ 
+        }
+        p[i].ft %= mod;
+    }
+    mem(d, -1);
+    ll cnt = go(0, 0);
+    ll g = gcd(all, cnt);
+    cout << cnt / g << "/" << all / g;
 }
