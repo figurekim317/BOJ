@@ -1,67 +1,76 @@
 #include <bits/stdc++.h>
+#define rep(i,n) for(int i=0;i<n;++i)
+#define REP(i,n) for(int i=1;i<=n;++i)
+#define FAST cin.tie(NULL);cout.tie(NULL); ios::sync_with_stdio(false)
 using namespace std;
-typedef long long ll;
-typedef pair<int,int> pii;
-typedef pair<ll,ll> pll;
-#define pb push_back
-#define ff first
-#define ss second
-#define MOD 1000000009
-#define N 100010
-#define M 3010
 
-int n,m,vis[M];
-ll now[M];
-vector<string> a;
-vector<int> out[M],in[M],use[M];
-string c;
-queue<int> b;
+typedef pair<int, int> pii;
+map<string, int> STOI;
 
-int strfind(string p)
-{
-    for(int i=a.size();i--;) if(a[i]==p) return i;
-    a.pb(p); return a.size()-1;
+int N,cnt,num,VC,SC;
+string u, v,want;
+
+vector<vector<int>> adj;
+vector<vector<pii>> scc_adj;
+vector<int> sccid, discovered;
+
+vector<long long> cache;
+stack<int> st;
+
+int scc(int here) {
+    int ret = discovered[here] = VC++;
+    st.emplace(here);
+
+    for (auto there : adj[here]) {
+        if (discovered[there] == -1) ret = min(ret, scc(there));
+        else if (sccid[there] == -1) ret = min(ret, discovered[there]);
+    }
+
+    if (ret == discovered[here]) {
+        while (1) {
+            int t = st.top();
+            st.pop();
+            sccid[t] = SC;
+            if (t == here) break;
+        }
+        SC++;
+    }
+    return ret;
 }
 
-void dfs(int p)
-{
-    if(vis[p]) return;
-    vis[p]=1;
-    for(auto i:out[p]) dfs(i);
-}
-
-int main(){
-    freopen("input.txt","r",stdin);
-    cin>>n;
-    for(int ii,i;n--;)
-    {
-        cin>>c>>ii; i=strfind(c);
-        for(string j;ii--;) cin>>j,out[strfind(j)].pb(i),in[i].pb(strfind(j));
-    }
-    cin>>c; m=strfind(c); n=a.size();
-    for(int i=n;i--;)
-    {
-        dfs(i);
-        for(auto j:in[i]) if(!vis[j]) use[j].pb(i);
-        memset(vis,0,sizeof(vis));
-    }
-    for(int i=n;i--;)
-        for(auto j:use[i]) vis[j]++;
-    for(int i=n;i--;)
-    {
-        if(!vis[i]) b.push(i);
-        now[i]=1;
-    }
-    while(!b.empty())
-    {
-        int t=b.front(); b.pop();
-        if(t==m) {printf("%lld",now[m]); break;}
-        for(auto i:use[t])
-        {
-            now[i]+=now[t];
-            vis[i]--;
-            if(!vis[i]) b.push(i);
+int main() {
+    FAST;
+    cin >> N;
+    adj.resize(2501);
+    rep(i, N) {
+        cin >> u >> cnt;
+        if (STOI.find(u) == STOI.end()) STOI[u] = num++;
+        rep(j, cnt) {
+            cin >> v;
+            if (STOI.find(v) == STOI.end()) STOI[v] = num++;
+            adj[STOI[v]].emplace_back(STOI[u]);
         }
     }
+    cin >> want;
+    if (STOI.find(want) == STOI.end()) STOI[want] = num++;
+
+    discovered = sccid = vector<int>(2501, -1);
+    rep(i, num) if (discovered[i] == -1) scc(i);
+
+    scc_adj.resize(2501);
+    rep(here,num) for(auto there : adj[here]){
+        if (sccid[here] != sccid[there])
+            scc_adj[sccid[here]].emplace_back(here, there);
+    }
+
+    int wt =STOI[want];
+    cache.resize(2500, 1);
+    for (int i = SC-1;i;--i) {
+        for (auto [a,b] : scc_adj[i]){
+            cache[b] += cache[a];
+        }
+    }
+    cout << cache[wt];
     return 0;
 }
+ 
