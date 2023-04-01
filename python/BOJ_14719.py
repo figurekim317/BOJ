@@ -1,27 +1,24 @@
-from typing import List
+import sys
 
+h, w = map(int, sys.stdin.readline().split())
+heights = list(map(int, sys.stdin.readline().split()))
 
-def rain_water(_vh: str, _blocks: str) -> None:
-    v: int
-    h: int
-    v, h = map(int, _vh.split())
+left, right = 0, w - 1
+left_max, right_max = heights[left], heights[right]
 
-    blocks: List[int]
-    blocks = list(map(int, _blocks.split()))
-    total: int = 0
+ans = 0
 
-    if h < 3:
-        print(total)
-        return
+# two pointer
+# brute force 로 풀어봤는데 참고자료에서 two pointer 풀이법이 있어서 참고하였다
+while left < right:
+    left_max = max(left_max, heights[left])
+    right_max = max(right_max, heights[right])
 
-    for j in range(1, h - 1):
-        lhs, rhs = 0, 0
-        lhs, rhs = max(blocks[:j]), max(blocks[j + 1:])
-        level = min(lhs, rhs)
-        temp = level - blocks[j]
-        if 0 < temp:
-            total += temp
-    print(total)
+    if left_max >= right_max:
+        ans += right_max - heights[right]
+        right -= 1
+    if left_max < right_max:
+        ans += left_max - heights[left]
+        left += 1
 
-
-rain_water(input(), input())
+print(ans)

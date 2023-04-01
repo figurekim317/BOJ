@@ -1,54 +1,60 @@
-from itertools import combinations
-from functools import reduce
+import sys
 
-def ynUnion(str1, str2):
-    res = ""
-    for i in range(len(str1)):
-        if str1[i] == "Y" or str2[i] == "Y":
-            res += "Y"
-        else:
-            res += "N"
-    return res    
+n, m = map(int, (input().split(' ')))
 
-def countYes(str1):
-    cnt = 0
-    for i in str1:
-        if i == "Y":
-            cnt += 1
-    return cnt
-
-#############################
-# 비트연산처럼 접근해보기
-
-n, m = map(int, input().split())
-inputArr = []
-
+guitars = [sys.stdin.readline().rsplit() for _ in range(n)]
+used = ''
+ans = float('inf')
+cnt = 0
 for i in range(n):
-    # 기타 이름은 쓰이지 않는다
-    inputArr.append(input().split()[1])
+    guitars[i][1] = list(guitars[i][1])
 
-# 초기 문자열 설정
-tmp = "N" * m
-# 최대 연주 가능 곡 갯수 파악하기
-for i in range(len(inputArr)):
-    tmp = ynUnion(inputArr[i], tmp)
-playable = countYes(tmp)
+## or 연산을 통해서 y가 하나라도 있으면 y로 바꿔줌
+def _or(l1, l2):
+    _l = ['N' for _ in range(m)]
 
-if playable == 0:
-    print("-1")
-    exit()
+    for i in range(m):
+        if l1[i] == 'Y' or l2[i] == 'Y':
+            _l[i] = 'Y'
 
-# 루프를 순회하며 1개, 2개, 3개, 4개 선택해나가며 늘려감
-# 최대 연주 가능 곡 갯수에 도달하면 break
-for i in range(n):
-    tmp = str(inputArr[0])
-    candidates = list(combinations(inputArr, i + 1))
-    
-    for j in range(len(candidates)):
-        tmp = "N" * m
-        # 리스트 안의 각 요소끼리 더함
-        tmp = reduce(ynUnion, candidates[j], tmp)
-        if countYes(tmp) == playable:
-            print(i + 1)
-            exit()
-    
+    return _l
+
+# 연주가능한 수 출력
+def count_y(l):
+    c = 0
+    for _l in l:
+        if _l == 'Y':
+            c += 1
+    return c
+
+# 백트래킹을 통해서 완전탐색
+def search(l, index, num):
+    global ans, cnt
+    total_y = count_y(l)
+    # 이 부분을 잘못생각했었는데 모든 연주를 쳐야할 필요는 없었다.
+    # 연주를 하나라도 칠 수 있으면 결과값을 갱신
+    if cnt < total_y:
+        cnt = total_y
+        ans = num
+
+    elif cnt == total_y:
+        if total_y != 0:
+            ans = min(num, ans)
+
+    if ''.join(l) == 'Y' * m:
+        ans = min(num, ans)
+        return
+
+    if index == n:
+        return
+
+    for i in range(index, n):
+        search(_or(l, guitars[i][1]), i + 1, num + 1)
+
+
+search(['N' for _ in range(m)], 0, 0)
+if ans == float('inf'):
+    print(-1)
+else:
+    print(ans)
+

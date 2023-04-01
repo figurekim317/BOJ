@@ -1,53 +1,41 @@
-from typing import List
+import sys
 
+n, m, rotation = map(int, input().split(' '))
+board = []
 
-def rotate(n: int, m: int, array: List[List[int]]) -> List[List[int]]:
-    dx = [1, 0, -1, 0]
-    dy = [0, 1, 0, -1]
+for i in range(n):
+    board.append(list(map(int, sys.stdin.readline().split())))
 
-    nn, nm = n - 1, m - 1
-    direction = 0
+# 실버1 구현문제에 개털림.....
+# 참고하였는데 다시 한번 꼮 풀어보기
+for _ in range(rotation):
+    for i in range(min(n, m) // 2):
+        x, y = i, i
+        val = board[x][y]
 
-    check_is_vertical = lambda x: x == 0 or x == 2
-    x, y = 0, 0
+        for j in range(i + 1, n - i): # 좌
+            x = j
+            prev_value = board[x][y]
+            board[x][y] = val
+            val = prev_value
 
-    while 0 < nn and 0 < nm:
+        for j in range(i + 1, m - i): # 하
+            y = j
+            prev_value = board[x][y]
+            board[x][y] = val
+            val = prev_value
 
-        prev_num = array[x][y]
+        for j in range(i + 1, n - i): # 우
+            x = n - j - 1
+            prev_value = board[x][y]
+            board[x][y] = val
+            val = prev_value
 
-        while direction < 4:
-            if check_is_vertical(direction):
-                count = nn
-            else:
-                count = nm
-            for i in range(count):
-                nx = x + dx[direction]
-                ny = y + dy[direction]
-                array[nx][ny], prev_num = prev_num, array[nx][ny]
-                x, y = nx, ny
+        for j in range(i + 1, m - i): # 상
+            y = m - j - 1
+            prev_value = board[x][y]
+            board[x][y] = val
+            val = prev_value
 
-            direction += 1
-
-        nn -= 2
-        nm -= 2
-        x += 1
-        y += 1
-
-        direction = 0
-
-    return array
-
-
-def array_rotation(n: int, m: int, r: int, array: List[List[int]]) -> List[List[int]]:
-    for _ in range(r):
-        rotate(n, m, array)
-    return array
-
-
-N, M, R = map(int, input().split())
-arr = []
-for _ in range(N):
-    arr.append(list(map(int, input().split())))
-answer_array = array_rotation(N, M, R, arr)
-for row in answer_array:
-    print(*row)
+for i in board:
+    print(*i)

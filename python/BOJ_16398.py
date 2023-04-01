@@ -1,43 +1,46 @@
-from typing import List
+#크루스칼 알고리즘을 이용한 최소비용 신장트리 구현
+import sys
+input = sys.stdin.readline
 
-
-def find(parent: List[int], x: int) -> int:
+#특정 우너소가 속한 집합을 찾기
+def find_parent(x):
+    #루트 노드를 찾을 때까지 재귀 호출
     if parent[x] != x:
-        parent[x] = find(parent, parent[x])
+        parent[x] = find_parent(parent[x])
     return parent[x]
 
+# 두 원소가 속한 집합을 합치기
+def union_parent(a, b):
+    a = find_parent(a)
+    b = find_parent(b)
 
-def union(parent: List[int], a: int, b: int) -> None:
-    a = find(parent, a)
-    b = find(parent, b)
     if a < b:
         parent[b] = a
     else:
         parent[a] = b
 
 
-def planet_connection(n: int, _planets: List[str]) -> None:
-    planets = [list(map(int, x.split())) for x in _planets]
-    minimum_flow = 0
-    edges = []
-    parent = [x for x in range(n)]
+n = int(input())
+parent = [i for i in range(n)] # 부모 테이블 초기화 (부모를 자기 자신으로 초기화)
+graph = [list(map(int, input().split())) for _ in range(n)]
+edges = []
 
-    for i in range(n):
-        for j in range(i + 1, n):
-            edges.append((planets[i][j], i, j))
-    edges.sort()
+#모든 간선에 대한 정보 입력 받기
+for a in range(n):
+    for b in range(a + 1, n):
+        #비용순 정렬을 위해서 value 값을 맨 앞으로 둔다.
+        edges.append((graph[a][b], a, b))
 
-    for edge in edges:
-        cost, a, b = edge
-        if find(parent, a) != find(parent, b):
-            union(parent, a, b)
-            minimum_flow += cost
+#간선을 비용순으로 정렬
+edges.sort()
 
-    print(minimum_flow)
+result = 0
 
+for edge in edges:
+    cost, a, b = edge
+    #사이클이 발생하지 않는 경우에만 집합에 포함
+    if find_parent(a) != find_parent(b):
+        union_parent(a, b)
+        result += cost
 
-N = int(input())
-arr = []
-for _ in range(N):
-    arr.append(input())
-planet_connection(N, arr)
+print(result)

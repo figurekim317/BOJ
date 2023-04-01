@@ -1,44 +1,33 @@
-#최고 길이 세고, 최고 길이 배열을 저장하기
-#1. 이전거가 collect에 in 되는지 검사하기
-#2. 속했을때 => if문으로 하나하나 돌면서 길이 증가
-#3. 안속했을때 => 속했을 만큼의 배열과 배열의 길이를 저장해놓는다.
-import sys
+# (*ΦωΦ*) 고냥이문제
+import collections
 
-n = int(sys.stdin.readline().rstrip());                  #2
-str = sys.stdin.read().rstrip();                  #abbcaccba
+n = int(input())
+str = list(input())
 
-maxCount=0;
-start = 0;
-end = 0;
-i = 0;
+mid = len(str) // 2
+max_length = 0
+dic = collections.defaultdict(int)
+dic[str[0]] = 1
 
-#dict 로 바꾸기
-#들어오는 string의 길이가 길어질 시 set함수가 시간을 
-dict={}
-#for => i로
-while (i < len(str) and end < len(str)):
+#two pointer
+p1, p2 = 0, 0
+st, end = 0, len(str) - 1
 
-#문자열을 집어넣기 전에 dict에 전처리한다. 일단 넣는건 무조건 넣어줘야 되니까
-    if str[end] not in dict:
-        dict[str[end]] = 1;
-    else :
-        dict[str[end]] += 1;
-    
-    #딕셔너리 안의 문자가 n 보다 크면
-    if len(dict) > n :
-        while (start <= end and len(dict) > n):
-            if dict[str[start]] == 1:   #start값이 하나 남았다면 그냥 맨앞껄 뺴주면 된다. #abbc
-                dict.pop(str[start]); #해당값을 pop해줌
-            else :                      #aabac이렇게 되어 있다면
-                dict[str[start]] -=1 ;     #값을 하나씩 빼주면서 끝까지 빼낼 수 있도록 찾아낸다.
-            start+=1;
+while p1 != end:
+    # dictionay 를 사용하지 않고 길이가 길어질때마다 set을 이용한 길이 계산을 하였더니 시간초과가 발생
+    # dictionary 값을 이용하여 값이 0 이 되면 pop 시켜서 총 길이를 계산하였다.
+    # 투포인터를 이용하여 길이가 입력 n보다 커지면 p1 값 증가 , n보다 작거나 같으면 p2값 증가
+    if len(dic) <= n:
+        max_length = max(max_length, p2-p1+1)
+        if p2 == end:
+            break
+        p2 += 1
+        dic[str[p2]] += 1
+    else:
+        if dic[str[p1]] == 1:
+            dic.pop(str[p1])
+        else:
+            dic[str[p1]] -= 1
+        p1 += 1
 
-    #만약 연속된 n개의 문자열이 들어왔을 경우
-    #result안에 최대 길이가 될 수 있도록 넣어주자.
-    if( len(dict) <= n ):
-        
-        maxCount = max(maxCount , end - start );
-    end += 1;
-
-print(maxCount+1);
-       
+print(max_length)

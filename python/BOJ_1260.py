@@ -1,46 +1,47 @@
+import collections
+import sys
+
+n, m, v = map(int, sys.stdin.readline().split())
+dic = collections.defaultdict(list)
+
+for _ in range(m):
+    st, ed = map(int, input().split(' '))
+    dic[st].append(ed)
+    dic[ed].append(st)
+
+for i in range(1, n+1):
+    dic[i].sort()
+
+visited = [False for _ in range(n + 1)]
 
 
-import sys ;
-
-N, M, V =  map(int,(input().split()));
-graph = [[] for _ in range(N+1)];
-    
-for _ in range(M) :
-    v1, v2 = map(int,(input().split()));
-    graph[v1].append(v2);
-    graph[v2].append(v1);
-
-def bfs(start) :
-    visit = list();
-    queue = list();
-    queue.append(start);
-
-    while queue :
-        node = queue.pop(0);
-        if node not in visit:
-            visit.append(node);
-            graph[node].sort();
-            queue.extend(graph[node]);
-    return visit;
-
-def dfs(start):
-    visit = list();
-    stack = list();
-    stack.append(start);
-    while stack:
-        node = stack.pop();
-        if node not in visit :
-            visit.append(node);
-            graph[node].sort(reverse=True);
-            stack.extend(graph[node]);
-    return visit;
+def dfs(st):
+    print(st, end=' ')
+    visited[st] = True
+    for i in dic[st]:
+        if not visited[i]:
+            dfs(i)
+            visited[i] = True
 
 
+def bfs(st):
+    visited = [False for _ in range(n + 1)]
+    q = collections.deque()
+    q.append(st)
+    visited[st] = True
 
-d = dfs(V);
-b = bfs(V);
+    while q:
+        _st = q.popleft()
 
-print(*d);
-print(*b);
+        print(_st, end=' ')
+        points = dic[_st]
 
-    
+        for point in points:
+            if not visited[point]:
+                visited[point] = True
+                q.append(point)
+
+
+dfs(v)
+print()
+bfs(v)

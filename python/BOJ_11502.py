@@ -1,35 +1,30 @@
-import math
-from typing import List
+#t = int(input())
+t = [i for i in range(7, 999, 2)]
+
+prime = [True] * 1001
+m = int(1000**0.5)
+
+#에라토스테네스의 체
+for i in range(2, m+1):
+    if prime[i]:
+        for j in range(i+i, 1001, i):
+            prime[j] = False
+
+#소수인 값들만 선별
+primeList = [i for i in range(2, 1001) if prime[i]]
+
+answer = []
 
 
-def is_prime_num(n: int):
-    for i in range(2, int(math.sqrt(n)) + 1):  # n의 제곱근을 정수화 시켜준 후 + 1
-        if n % i == 0:
-            return False
-    return True
-
-
-def find_three_decimal(decimals: List[int], number: int):
-    result = []
-    for a in decimals:
-        for b in decimals:
-            for c in decimals:
-                if a + b + c == number:
-                    result.extend([a, b, c])
-                    return result
-    return result
-
-
-def three_decimal(number: int) -> None:
-
-    decimals = []
-    for x in range(2, 1000):
-        if is_prime_num(x):
-            decimals.append(x)
-
-    result = find_three_decimal(decimals, number)
-
-    if result:
-        print(*result)
-        return
+def print_number(t):
+    for i in primeList:
+        for j in primeList:
+            for z in primeList:
+                if i + j + z == t:
+                    print(i, j, z, i+j+z)
+                    return
     print(0)
+
+
+for i in t:
+    print_number(i)

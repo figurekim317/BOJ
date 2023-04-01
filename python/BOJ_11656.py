@@ -1,15 +1,14 @@
-from typing import List
+import collections
 
+str = list(input())
+str = collections.deque(str)
+arr = []
 
-def prefix_array(_string: str) -> List[str]:
-    arr = []
-    c = ''
-    for s in reversed(_string):
-        c += s
+while str:
+    arr.append(''.join(str))
+    str.popleft()
 
-        arr.append(c[::-1])
+arr.sort()
 
-    return sorted(arr)
-
-for word in prefix_array(input()):
-    print(word)
+for i in arr:
+    print(i)
