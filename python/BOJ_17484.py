@@ -1,42 +1,27 @@
+def moon_travel(height, width, area) -> int:
+    answer = 101
 
-N,M = list(map(int,(input().split())) );
-ydir =[-1, 0 , 1];
-min = 10000000000000000000000;
-def dfs(depth, y, dir):
-    if(depth == N):
-        sums = trip[0][visited[0]];
-        for i in range(N):
-            sum+= trip[i][visited[i]];
-        
-        min =  sums if (min > sums) else min;
-        return ;
+    def move(weight: int, x: int, y: int, result: int):
+        nonlocal answer, height, width, area
 
-    for i in range (3):
-        dy = y + ydir[i];
-        if(isValidPosition(dy) & dir != i) :
-            visited[depth] = dy;
-            dfs(depth+1, dy, i);
+        if not (0 <= y < width):
+            return
+        if height <= x:
+            answer = min(answer, result)
+            return
 
+        for w in [-1, 0, 1]:
+            if w == weight:
+                continue
+            move(w, x+1, y+w, result + area[x][y])
 
-def isValidPosition(y):
-    if(y < 0 | y >=  M) :
-        return False;
-    return True;
+    for i in range(len(area[0])):
+        move(2, 0, i, 0)
+    return answer
 
 
-
-trip = [[0 for col in range(M)] for row in range(N)] 
-visited = [[0 for col in range(M)] for row in range(N)] 
-
-
-#trip에 값 복사
-for i in range (N) :
-    line = list(map(int,(input().split())) );
-    trip[i] = line ;
-    
-
-for i in range(M):
-    visited[0] = i;
-    dfs(1, i , -1);
-
-print(min);
+height, width = map(int, input().split())
+arr = []
+for _ in range(height):
+    arr.append(list(map(int, input().split())))
+print(moon_travel(height, width, arr))

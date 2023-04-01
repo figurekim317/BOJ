@@ -1,14 +1,26 @@
-#입력받기
+def stack_sequence(input_value_n: str) -> None:
+    n = int(input_value_n)
 
-import sys
-
-n = int(input());
-
-before =  i in rarange
-target = [0] * (n+1); #인덱스 1부터 사용하기 위해서
-
-for i in range(1, n+1):
-    target[i] = int(sys.stdin.readline().rstrip());
-
-
-print(target);
+    cnt = 0
+    res = []
+    stack = []
+    isValid = True
+    
+    for i in range(n):
+        cur = int(input())
+        while cnt < cur:
+            cnt += 1
+            res.append("+")
+            stack.append(cnt)
+        if stack[-1] == cur:
+            stack.pop()
+            res.append("-")
+            continue
+        isValid = False
+        break
+    
+    if isValid:
+        print("\n".join(res))
+        return
+    print("NO")
+stack_sequence(input())

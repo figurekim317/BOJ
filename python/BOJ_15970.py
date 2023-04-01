@@ -1,37 +1,36 @@
-#BOJ_15970 
-#점들은 N개의 색깔을 가진다.
-#1부터 N까지의 수로 표시한다.
-
-#점들의 순서쌍 (위치, 색깔)
-#화살표길이의 합
-
-import sys
-
-#입력받기
-n = int(sys.stdin.readline().rstrip());
-dots = [[] for i in range(n)];
-
-#색깔로 받기
-for i in range(n):
-    x, y = map(int,(sys.stdin.readline().rstrip().split()));
-    dots[y-1].append(x);
-
-hap = 0;
-
-for i in range(n):
-    temp = sorted(dots[i]);
-    for i in range(len(temp)):
-        if i ==0 :
-            hap += temp[i+1] - temp[i];
-        elif i == len(temp) - 1 :
-            hap += temp[i] - temp[i-1];
-        else : 
-            hap += min(temp[i+1]-temp[i], temp[i]- temp[i-1])
-
-print(hap);
+from bisect import bisect_left
+from collections import defaultdict
+from typing import List, Tuple
 
 
+def draw_arrow(n: int, points: List[Tuple[int]]) -> None:
+    repo = defaultdict(list)
+    answer = 0
 
+    for i in range(n):
+        location, color = points[i]
+        repo[color].append(location)
 
+    for k in repo.keys():
+        repo[k].sort()
 
+    for i in range(n):
+        location, color = points[i]
 
+        pivot = bisect_left(repo[color], location)
+        current = repo[color][pivot]
+
+        if pivot == 0:
+            answer += abs(current - repo[color][pivot + 1])
+        elif pivot == len(repo[color]) - 1:
+            answer += abs(current - repo[color][pivot - 1])
+        else:
+            smaller = repo[color][pivot - 1]
+            bigger = repo[color][pivot + 1]
+
+            if current - smaller < bigger - current:
+                answer += current - smaller
+            else:
+                answer += bigger - current
+
+    print(answer)

@@ -1,14 +1,15 @@
-s =input();
-
-#1. 접미사 배열 만들기
-arr = [];
-
-for  i in range(len(s)) :
-    arr.append((s[0+i:] ));
-arr.sort();
-
-for i in range(len(s)) :
-    print(arr[i])
+from typing import List
 
 
-#2. 정렬해서 순서 출력
+def prefix_array(_string: str) -> List[str]:
+    arr = []
+    c = ''
+    for s in reversed(_string):
+        c += s
+
+        arr.append(c[::-1])
+
+    return sorted(arr)
+
+for word in prefix_array(input()):
+    print(word)

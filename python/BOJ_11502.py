@@ -1,28 +1,35 @@
-def printCombination(n):
-    # 에라토스테네스의 체
-    allNum = [False, False] + [True] * (n - 1)
-    primes = []
-    for i in range(2, n + 1):
-        if allNum[i]:
-            primes.append(i)
-            for j in range(2 * i, n + 1, i):
-                allNum[j] = False
-
-    for i in primes:
-        for j in primes:
-            for k in primes:
-                if i + j + k == n:
-                    print(i, j, k)
-                    return
-    
-    print("0")
-    return
+import math
+from typing import List
 
 
-n = int(input())
-arr = []
-for i in range(n):
-    arr.append(int(input()))
+def is_prime_num(n: int):
+    for i in range(2, int(math.sqrt(n)) + 1):  # n의 제곱근을 정수화 시켜준 후 + 1
+        if n % i == 0:
+            return False
+    return True
 
-for i in range(n):
-    printCombination(arr[i])
+
+def find_three_decimal(decimals: List[int], number: int):
+    result = []
+    for a in decimals:
+        for b in decimals:
+            for c in decimals:
+                if a + b + c == number:
+                    result.extend([a, b, c])
+                    return result
+    return result
+
+
+def three_decimal(number: int) -> None:
+
+    decimals = []
+    for x in range(2, 1000):
+        if is_prime_num(x):
+            decimals.append(x)
+
+    result = find_three_decimal(decimals, number)
+
+    if result:
+        print(*result)
+        return
+    print(0)

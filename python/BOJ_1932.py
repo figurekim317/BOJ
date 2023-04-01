@@ -1,19 +1,16 @@
-#정수 삼각형
-#삼각형의 크기는 1이상 500이하. 
-import sys
-#입력받기
-n = int(sys.stdin.readline());
-triangle =[[0]*501 for i in range(n)];
-
-for i in range (0, n):
-    triangle[i] = list(map(int,(sys.stdin.readline().split())));
+from typing import List
 
 
-for i in range(1, n):
-    for j in range(0, i + 1):
-        if j == 0 : triangle[i][j] += triangle[i-1][0];
-        elif j == i : triangle[i][j] +=  triangle[i-1][j-1];
-        else : triangle[i][j] += max(triangle[i-1][j-1], triangle[i-1][j]);
+def digit_triangle(n: int, numbers: List[List[int]]) -> None:
+    d = [[0] * (n + 1) for _ in range(n + 1)]
+    d[1][1] = numbers[0][0]
+    for i in range(2, n + 1):
+        for j in range(1, i + 1):
+            d[i][j] = max(d[i - 1][j] + numbers[i - 1][j - 1], d[i - 1][j - 1] + numbers[i - 1][j - 1])
+    print(max(d[-1]))
 
-
-print(max(triangle[n-1]));
+N = int(input())
+arr = []
+for _ in range(N):
+    arr.append(list(map(int, input().split())))
+digit_triangle(N, arr)
