@@ -1,8 +1,5 @@
 
 
-#define N 15
-#define MOD 1000000007
-
 int n,vis[N],work[N],par[N];
 ll a[N][N],m,ans[N];
 vector<int> ed[N];
