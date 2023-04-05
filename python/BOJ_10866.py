@@ -1,8 +1,10 @@
-adline으로 import collections
+import collections
 import sys
 
-# input() -> sys.stdin.re수정하여 시간초과 문제 해결
-#
+
+
+
+# input() -> sys.stdin.readline으로 수정하여 시간초과 문제 해결
 n = int(sys.stdin.readline())
 q = collections.deque()
 
