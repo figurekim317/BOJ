@@ -1,7 +1,4 @@
 
-
-def find_clean_machine(n: int, matrix: List[List[int]]) -> Tuple:
-    start = 0
     for row in range(n):
         if matrix[row][0] == -1:
             start = row
