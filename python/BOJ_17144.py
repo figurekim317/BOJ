@@ -1,7 +1,4 @@
-
-            break
-
-    return start, start + 1
+ 1
 
 
 def spread(r, c, result, spreaded, divided, machine_row_1, machine_row_2) -> Tuple[List[List[int]], List[List[int]]]:
