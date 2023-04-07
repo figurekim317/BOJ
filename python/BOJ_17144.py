@@ -1,4 +1,7 @@
 
+    for row in range(n):
+        if matrix[row][0] == -1:
+            start = row
             break
 
     return start, start + 1
