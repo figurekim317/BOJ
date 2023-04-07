@@ -1,3 +1,7 @@
+from copy import deepcopy
+from typing import List, Tuple
+
+
 
 def find_clean_machine(n: int, matrix: List[List[int]]) -> Tuple:
     start = 0
