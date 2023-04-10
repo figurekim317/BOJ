@@ -1,6 +1,5 @@
-
-
-
+import heapq
+import sys
 
 n, m, x = map(int, input().split(' '))
 INF = int(1e9)
