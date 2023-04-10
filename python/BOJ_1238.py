@@ -1,6 +1,5 @@
 
 
-
 n, m, x = map(int, input().split(' '))
 INF = int(1e9)
 graph = [[] for _ in range(m+1)]
