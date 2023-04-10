@@ -1,5 +1,4 @@
-import heapq
-import sys
+
 
 
 n, m, x = map(int, input().split(' '))
