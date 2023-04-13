@@ -2,9 +2,6 @@ import sys
 import os
 import numpy
 
-
-
-
 n, m = map(int, (input().split(' ')))
 
 guitars = [sys.stdin.readline().rsplit() for _ in range(n)]
