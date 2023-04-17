@@ -1,6 +1,7 @@
-#include <
 
-bits/stdc++.h>
+
+
+#include <bits/stdc++.h>
 using namespace std;
 
 int n,vis[60],mat[60],a[60],num[60];
