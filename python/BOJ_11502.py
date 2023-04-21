@@ -1,30 +1,54 @@
-#t = int(input())
-t = [i for i in range(7, 999, 2)]
+#11502 세개의 소수 문제
+#부르트포스 , 에라토스테네스의 체
 
-prime = [True] * 1001
-m = int(1000**0.5)
+import sys
 
-#에라토스테네스의 체
-for i in range(2, m+1):
-    if prime[i]:
-        for j in range(i+i, 1001, i):
-            prime[j] = False
 
-#소수인 값들만 선별
-primeList = [i for i in range(2, 1001) if prime[i]]
 
+#에토체
+def isPrime(num) :
+    if (num < 2) : return;
+    i = 2 ;
+    while(i * i <= num) :
+        if (num % i == 0) :
+            i += 1;
+            return ;
+        i+=1;
+    return num;
+
+numList = [];
+primes =[];
+maxNum = 0;
 answer = []
 
+T =  int(sys.stdin.readline().rstrip());
 
-def print_number(t):
-    for i in primeList:
-        for j in primeList:
-            for z in primeList:
-                if i + j + z == t:
-                    print(i, j, z, i+j+z)
-                    return
-    print(0)
+#입력받기
+for i in range(T):
+    numList.append( int(sys.stdin.readline().rstrip()) );
+
+maxNum = max(numList);
+
+#소수구하기
+for i in range(maxNum):
+    a = isPrime(i);
+    if a != None : primes.append(a);
+
+for idx in range (len(numList)):
+    myList = [0]
+    for i in primes :
+        if(myList[0] != 0):
+            break;
+        for j in primes :
+            if(myList[0] != 0):
+                break;
+            for k in primes :
+                sum = i + j + k ;
+                if( sum == numList[idx]) :
+                    myList = [i,j,k];
+                    answer.append(myList);
+                    break;
 
 
-for i in t:
-    print_number(i)
+for ans in answer:
+    print(*ans)
