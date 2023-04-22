@@ -1,4 +1,4 @@
-de <bits/stdc++.h>
+ <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
 
