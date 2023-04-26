@@ -1,5 +1,3 @@
-
-
 #include <stdio.h>
 #include <algorithm>
 int n,a[55],b[55],d;
