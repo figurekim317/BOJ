@@ -11,18 +11,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3 # 최신 Node.js 20으로 실행됨
+    - uses: actions/checkout@v3
+
+    - name: Set up Node.js 20
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20
+
     - name: Install dependencies
-      run: sudo apt-get install -y build-essential autoconf automake
+      run: sudo apt-get update && sudo apt-get install -y build-essential autoconf automake libtool pkg-config
+
     - name: Generate configure script
       run: autoreconf -i
+
     - name: Make configure executable
       run: chmod +x ./configure
+
     - name: Configure
       run: ./configure
+
     - name: Make
       run: make
+
     - name: Make Check
       run: make check
+
     - name: Make Distcheck
       run: make distcheck
