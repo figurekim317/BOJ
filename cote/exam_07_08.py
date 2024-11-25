@@ -1,7 +1,9 @@
 n, m = map(int, input().split())
 array = list(map(int, input().split()))
 array.sort()
-candidate = 0
+
+start = 0
+end = max(array)
 
 '''
 1. array 정렬
@@ -10,13 +12,17 @@ candidate = 0
 4. 더해준 값이 원하는 값보다 크다면 그때 candidate 값을 설정
 '''
 
-temp = 0
-while temp<m:
-    for i in array:
-        if candidate >= i:
-            continue
-        else:
-            temp += i-candidate
+result = 0
+while(start<=end):
+    total = 0
+    mid = (start+end)//2
+    for x in array:
+        if x > mid:
+            total += x-mid
+    if total < m:
+        end = mid - 1
+    else:
+        result = mid
+        start = mid + 1
     
-    
-
+print(result)
