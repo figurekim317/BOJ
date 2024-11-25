@@ -63,7 +63,7 @@ data에 잇는 노드의 값을 모두 그 값으로 바꿔줌
 10. data 평균으로 갱신 경험이 없으면 종료하고 print(count)
 '''
 
-sol by book
+#sol by book
 
 from collections import deque
 
