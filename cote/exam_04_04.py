@@ -1,4 +1,50 @@
 n, m = map(int, input().split())
+x, y, direction = map(int, input().split())
+
+map_data = [[*map(int, input().split())] for _ in range(n)]
+visited_map = [[0]*m for _ in range(n)]
+
+steps = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+
+def turn_left():
+    global direction
+    direction -= 1
+    if direction == -1:
+        direction = 3
+
+count = 1
+turn_time = 0
+while True:
+    turn_left()
+    nx = x + steps[direction]
+    ny = y + steps[direction]
+
+    if map_data[nx][ny] == 0 and visited_map[nx][ny] == 0:
+        x = nx
+        y = ny
+        count += 1
+        visited_map[nx][ny] = 1
+        turn_time = 0
+        continue
+    else:
+        turn_time += 1
+
+    if turn_time == 4:
+        nx = x - steps[direction]
+        ny = y - steps[direction]
+
+        if map_data[nx][ny] == 0:
+            x = nx
+            y = ny
+        else:
+            break
+        turn_time = 0
+
+print(count)
+
+
+
+n, m = map(int, input().split())
 # 방문한 위치를 저장하기 위한 맵을 생성하여 0으로 초기화
 d = [[0]*m for _ in range(n)]
 # 현재 캐릭터의 x, y, 방향을 입력 받기
@@ -10,7 +56,7 @@ d[x][y] = 1
 def turn_left():
     direction -= 1
     if direction == -1:
-        direction = 기
+        direction = 3
 
 count = 1
 turn_time = 0
