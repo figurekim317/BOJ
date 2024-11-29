@@ -1,6 +1,32 @@
 from collections import deque
 
 n, m = map(int, input().split())
+map_data = [[*map(int, input())] for _ in range(n)]
+
+steps = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+
+def bfs(x, y):
+    queue = deque()
+    queue.append((x, y))
+    while queue:
+        x, y = queue.popleft()
+        for step in steps:
+            nx = x + step[0]
+            ny = y + step[1]
+            
+            if nx < 0 or nx >= n or ny < 0 or ny >= n:
+                continue
+            if map_data[nx][ny] == 0:
+                continue
+            if map_data[nx][ny] == 1:
+                map_data[nx][ny] = map_data[x][y] + 1
+                queue.append((nx, ny))
+    return map_data[n-1][m-1]
+
+
+from collections import deque
+
+n, m = map(int, input().split())
 graph = []
 for i in range(n):
     graph.append(list(map(int, input())))

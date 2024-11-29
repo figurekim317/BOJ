@@ -2,11 +2,13 @@ def solution(words, queries):
     answer = []
     return answer
 
-words를 먼저 글자 수를 기준으로 정렬하고 사전 배열 식으로 정렬
+'''words를 먼저 글자 수를 기준으로 정렬하고 사전 배열 식으로 정렬
 
 
 queries에 있는 단어와 ?가 나오는 index 부터 끝나는 인덱스까지 전까지 단어가 일치하는지 체크하는 함수
 1. 체크했을 때 문자열이 일치하고 ???의 개수와 남은 문자열의 수가 같다면 count 증가
+'''
+
 from collections import defaultdict
 
 class TrieNode:
