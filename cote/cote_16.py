@@ -122,3 +122,48 @@ itertools.combinations를 사용하여 벽을 설치할 3개의 위치를 사전
 맵 복사를 copy.deepcopy로 처리:
 원본 맵을 훼손하지 않으면서 안전 영역 계산.
 '''
+
+
+from itertools import combinations
+from collections import deque
+import sys
+
+input = sys.stdin.readline
+n, m = map(int, input().split())
+
+graph = [[*map(int, input().split())] for _ in range(n)]
+empty_spaces = [(i, j) for i in range(n) for j in range(m) if graph[i][j] == 0]
+virus_positions = [(i, j) for i in range(n) for j in range(m) if data[i][j] == 2]
+
+result = 0
+
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
+
+
+def spread_virus(temp, virus_positions):
+    queue = deque(virus_positions)
+    while queue:
+        x, y = queue.popleft()
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
+            if 0 <= nx < n and 0 <= ny < m and temp[nx][ny] == 0:
+                temp[nx][ny] = 2
+                queue.append((nx, ny))
+
+def get_safe_area(temp):
+    return sum(row.count(0) for row in temp)
+
+# 벽을 세울 수 있는 모든 경우의 수 탐색
+for walls in combinations(empty_spaces, 3):
+    # 맵 복사
+    temp = copy.deepcopy(graph)
+
+    for x, y in walls:
+        temp[x][y] = 1
+    
+    spread_virus(temp, virus_positions)
+    result = max(result, get_safe_area(temp))
+
+print(result)
