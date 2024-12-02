@@ -40,8 +40,6 @@ if check == False:
 
 
 
-
-'''
 from collections import deque
 
 n, m, k, x = map(int, input().split())
@@ -71,4 +69,4 @@ for i in range(1, n+1):
         check = True
 
 if check == False:
-    print(-1)'''
+    print(-1)

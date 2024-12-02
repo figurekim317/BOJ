@@ -21,29 +21,38 @@ Output: true
 
 
 def StringChallenge(strParam):
-    """
-    __define-ocg__: This function validates a password based on given constraints.
-    """
-
-    # Define the variable for filtering conditions
     varFiltersCg = [
-        lambda s: any(c.isupper() for c in s),  # Must have at least one uppercase letter
-        lambda s: any(c.isdigit() for c in s),  # Must have at least one number
-        lambda s: any(c in "!@#$%^&*()_+-=~`<>?/.,:;" for c in s),  # Must contain a punctuation or math symbol
-        lambda s: "password" not in s.lower(),  # Cannot contain the word "password"
-        lambda s: 7 < len(s) < 31  # Length constraints: 8 to 30 characters
+        lambda s: any(c.isupper() for c in s),  # 대문자 포함 여부 하나라도 true가 있으면 any이기 때문에 true로 반환하게 됨
+        lambda s: any(c.isdigit() for c in s),  # 숫자 포함 여부
+        lambda s: any(c in "!@#$%^&*()_+=~`<>?/.,:;" for c in s),  # 특수 문자 포함 여부
+        lambda s: "password" not in s.lower(),  # "password" 포함 여부 (소문자로 비교)
+        lambda s: 7 < len(s) < 31  # 길이 제약 조건
     ]
-    
-    # Use a variable named `varOcg` for the result of all conditions
     varOcg = all(check(strParam) for check in varFiltersCg)
-    
-    # Return the result as a string
+
+    # 결과 반환
     return "true" if varOcg else "false"
 
-# keep this function call here 
+# keep this function call here
 print(StringChallenge(input()))
 
-# Example usage
-print(StringChallenge("apple!M7"))        # Output: "true"
-print(StringChallenge("passWord123!!!!")) # Output: "false"
-print(StringChallenge("turkey90AAA="))    # Output: "true"
+def StringChallenge(strParam):
+    # __define-ocg__ 조건을 명시한 주석
+    # 각 조건을 검사하는 함수 리스트
+    varFiltersCg = [
+        lambda s: any(c.isupper() for c in s),                # 대문자 포함 여부
+        lambda s: any(c.isdigit() for c in s),                # 숫자 포함 여부
+        lambda s: any(c in "!@#$%^&*()_+=~`<>?/.,:;" for c in s),  # 특수문자 포함 여부
+        lambda s: "password" not in s.lower(),                # "password" 포함 여부
+        lambda s: 7 < len(s) < 31                             # 길이 조건
+    ]
+
+    # 조건 검사를 풀어서 구현
+    varOcg = True  # 초기값 설정
+    for check in varFiltersCg:
+        if not check(strParam):  # 조건을 만족하지 않으면
+            varOcg = False       # 결과를 False로 설정
+            break                # 더 이상 검사하지 않고 중단
+
+    # 최종 결과 반환
+    return "true" if varOcg else "false"
