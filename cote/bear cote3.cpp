@@ -51,23 +51,23 @@ n×(n−1) // 2
 
 */
 
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <unordered_map>
-#include <unordered_set>
-#include <algorithm>
+#include <iostream> // cin, cout 표준 입출력 라이브러리
+#include <string> // 문자열 처리 library, std::string 객체를 사용하여 문자열 데이터 관리
+#include <sstream> // 문자열 스트림라이브러리, std::stringstream을 사용하여 문자열을 공백 기준으로 쉽게 분리
+#include <unordered_map> // 해시맵 자료구조 제공, key-value 효율적으로 저장하고 검색 가능
+#include <unordered_set> // 중복을 허용하지 않는 데이터 컬렉션을 관리하기 위한 std::unordered_set 사용
+#include <algorithm> // 알고리즘 라이브러리, std::sort를 사용하여 문자열의 문자를 정력
 using namespace std;
 
 string ArrayChallenge(string str) {
-  // __define-ocg__: Function to calculate the number of anagrams in a given string.
+  // __define-ocg__: Function to calculat력 the number of anagrams in a given string.
 
   // Step 1: Split the input string into words
-  stringstream ss(str);
+  stringstream ss(str); // 문자열 스트림 초기화, 문자열을 공백으로 구분하여 단어 단위로 쉽게 분리 가능
   string word;
   unordered_map<string, unordered_set<string>> varFiltersCg; // Map to store sorted words and their original words
 
-  while (ss >> word){
+  while (ss >> word){ // 공백을 기준으로 단어를 하나씩 추출하여 word 변수에 저장
     // Step 2: Sort each word alphabetically
     string sortedWord = word;
     sort(sortedWord.begin(), sortedWord.end());
